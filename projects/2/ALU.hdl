@@ -39,7 +39,49 @@ CHIP ALU {
         out[16], // 16-bit output
         zr,      // if (out == 0) equals 1, else 0
         ng;      // if (out < 0)  equals 1, else 0
-
     PARTS:
-    //// Replace this comment with your code.
+    // x変換
+    Zero16(a=x, z=zx, out=tempx);
+    Negate16(a=tempx, n=nx, out=resultx);
+
+    // y変換
+    Zero16(a=y, z=zy, out=tempy);
+    Negate16(a=tempy, n=ny, out=resulty);
+
+    // x and y
+    And16(a=resultx, b=resulty, out=xandy);
+
+    // x + y
+    Add16(a=resultx, b=resulty, out=xplusy);
+
+    // out
+    Mux16(a=xandy, b=xplusy, sel=f, out=tempout);
+    Negate16(a=tempout, n=no, out=out, out=anotherout, out[15]=topbit);
+
+    // zr
+    Not16(in=anotherout, out[0]=notout0, out[1]=notout1, out[2]=notout2, out[3]=notout3, out[4]=notout4, out[5]=notout5, out[6]=notout6, out[7]=notout7, out[8]=notout8, out[9]=notout9, out[10]=notout10, out[11]=notout11, out[12]=notout12, out[13]=notout13, out[14]=notout14, out[15]=notout15);
+
+    And(a=notout0, b=notout1, out=andout1);
+    And(a=notout2, b=notout3, out=andout2);
+    And(a=notout4, b=notout5, out=andout3);
+    And(a=notout6, b=notout7, out=andout4);
+    And(a=notout8, b=notout9, out=andout5);
+    And(a=notout10, b=notout11, out=andout6);
+    And(a=notout12, b=notout13, out=andout7);
+    And(a=notout14, b=notout15, out=andout8);
+
+    And(a=andout1, b=andout2, out=andout9);
+    And(a=andout3, b=andout4, out=andout10);
+    And(a=andout5, b=andout6, out=andout11);
+    And(a=andout7, b=andout8, out=andout12);
+  
+    And(a=andout9, b=andout10, out=andout13);
+    And(a=andout11, b=andout12, out=andout14);
+
+    And(a=andout13, b=andout14, out=zr, out=anotherzr);
+
+    // ng
+    Not(in=topbit, out=nottopbit);
+    Not(in=anotherzr, out=notzr);
+    And(a=topbit, b=notzr, out=ng);
 }

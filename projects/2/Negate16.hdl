@@ -1,0 +1,22 @@
+CHIP Negate16 {
+    IN a[16], n;
+    OUT out[16];
+
+    PARTS:
+    Xor(a=a[0], b=n, out=out[0]);
+    Xor(a=a[1], b=n, out=out[1]);
+    Xor(a=a[2], b=n, out=out[2]);
+    Xor(a=a[3], b=n, out=out[3]);
+    Xor(a=a[4], b=n, out=out[4]);
+    Xor(a=a[5], b=n, out=out[5]);
+    Xor(a=a[6], b=n, out=out[6]);
+    Xor(a=a[7], b=n, out=out[7]);
+    Xor(a=a[8], b=n, out=out[8]);
+    Xor(a=a[9], b=n, out=out[9]);
+    Xor(a=a[10], b=n, out=out[10]);
+    Xor(a=a[11], b=n, out=out[11]);
+    Xor(a=a[12], b=n, out=out[12]);
+    Xor(a=a[13], b=n, out=out[13]);
+    Xor(a=a[14], b=n, out=out[14]);
+    Xor(a=a[15], b=n, out=out[15]);
+}
