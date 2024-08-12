@@ -13,8 +13,41 @@ CHIP PC {
     IN in[16],inc, load, reset;
     OUT out[16];
     
-    PARTS:
-    Not(in=reset, out=ny);
-    Not(in=load, out=f);
-    ALU(x=in, y=0, zx=reset, nx=inc, zy=1, ny=ny, f=f, no=inc, out=outALU, zr=zr, ng=ng);
+    PARTS:        
+    /*
+     *    reset |  load |  inc  |   result
+     *   ------------------------------------
+     *      0   |   0   |   0   |   out(t-1)
+     *      0   |   0   |   1   |   out(t-1)+1
+     *      0   |   1   |   0   |   in
+     *      0   |   1   |   1   |   in
+     *      1   |   0   |   0   |   0
+     *      1   |   0   |   1   |   0
+     *      1   |   1   |   0   |   0
+     *      1   |   1   |   1   |   0
+    */
+
+    // if reset(t):      out(t+1) = 0
+    Not(in=reset, out=notreset);
+    ALU(x=tempout, y=in, zx=reset, nx=notreset, zy=reset, ny=notreset, f=reset, no=notreset, out=resetout, zr=zr1, ng=ng1);
+
+    // else if load(t):  out(t+1) = in(t)
+    // in
+
+    // else if inc(t):   out(t+1) = out(t) + 1
+    Not(in=inc, out=notinc);
+    ALU(x=tempout, y=in, zx=notinc, nx=inc, zy=inc, ny=inc, f=inc, no=inc, out=incout, zr=zr2, ng=ng2);
+
+    // else              out(t+1) = out(t)
+    // tempout
+
+    // 制御ビットに応じてレジスタへ書き込む値算出
+    Mux8Way16(a=tempout, b=incout, c=in, d=in, e=resetout, f=resetout, g=resetout, h=resetout, sel[2]=reset, sel[1]=load, sel[0]=inc, out=outALU);
+
+    // レジスタへの書き込み有無判断
+    Or(a=reset, b=load, out=resetorload);
+    Or(a=resetorload, b=inc, out=tempload);
+
+    // レジスタ読み書き
+    Register(in=outALU, load=tempload, out=out, out=tempout);
 }
