@@ -1,13 +1,8 @@
 import os
 
-# コマンドタイプ定義
-A_COMMAND = 0
-C_COMMAND = 1
-L_COMMAND = 2
-
 
 class Parser:
-    def __init__(self, filename, root_dir='.'):
+    def __init__(self, filename, root_dir='../'):
         self.filename = filename
         self.root_dir = root_dir
         self.filepath = self.find_file()
@@ -42,16 +37,16 @@ class Parser:
 
     def command_type(self):
         if self.current_command.startswith('@'):
-            return A_COMMAND
+            return 'A_COMMAND'
         elif self.current_command.startswith('('):
-            return L_COMMAND
+            return 'L_COMMAND'
         else:
-            return C_COMMAND
+            return 'C_COMMAND'
 
     def symbol(self):
-        if self.command_type() == A_COMMAND:
+        if self.command_type() == 'A_COMMAND':
             return self.current_command[1:]
-        elif self.command_type() == L_COMMAND:
+        elif self.command_type() == 'L_COMMAND':
             return self.current_command[1:-1]
         else:
             raise ValueError('symbol() called for C_COMMAND')
@@ -65,6 +60,8 @@ class Parser:
     def comp(self):
         if '=' in self.current_command:
             return self.current_command.split('=')[1]
+        elif ';' in self.current_command:
+            return self.current_command.split(';')[0]
         else:
             return self.current_command
 
@@ -73,19 +70,3 @@ class Parser:
             return self.current_command.split(';')[1]
         else:
             return None
-
-
-if __name__ == '__main__':
-    # Parserクラスのテストコード
-    parser = Parser('test.txt')
-    while parser.has_more_commands():
-        parser.advance()
-        commandType = parser.command_type()
-        if commandType == A_COMMAND or commandType == L_COMMAND:
-            print(f'{parser.symbol()}')
-        # elif commandType == C_COMMAND:
-        #     print(f'C_COMMAND: {parser.current_command}')
-        # elif commandType == L_COMMAND:
-        #     print(f'L_COMMAND: {parser.symbol()}')
-        # else:
-        #     print('Unknown command type')
