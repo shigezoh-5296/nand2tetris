@@ -9,7 +9,7 @@ class Parser:
         if self.filepath is None:
             raise FileNotFoundError(f'File {filename} not found in {root_dir}')
         self.lines = self.get_lines()
-        self.next_line = 0
+        self.current_line = -1
         self.current_command = None
 
     def find_file(self):
@@ -29,11 +29,11 @@ class Parser:
         return lines
 
     def has_more_commands(self):
-        return self.next_line < len(self.lines)
+        return self.current_line + 1 < len(self.lines)
 
     def advance(self):
-        self.current_command = self.lines[self.next_line]
-        self.next_line += 1
+        self.current_line += 1
+        self.current_command = self.lines[self.current_line]
 
     def command_type(self):
         if self.current_command.startswith('@'):
