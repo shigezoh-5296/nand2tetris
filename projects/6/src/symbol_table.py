@@ -1,17 +1,25 @@
 class SymbolTable:
     def __init__(self):
         self.table = {}
-        self.add(self, 'SP', 0)
-        self.add(self, 'LCL', 1)
-        self.add(self, 'ARG', 2)
-        self.add(self, 'THIS', 3)
-        self.add(self, 'THAT', 4)
-        for i in range(16):
-            self.add(self, f'R{i}', i)
-        self.add(self, 'SCREEN', 16384)
-        self.add(self, 'KBD', 24576)
+        self.initialize_predefined_symbols()
+        self.current_ram_address = 16
 
-    def add(self, symbol, address):
+    def initialize_predefined_symbols(self):
+        self.table['SP'] = 0
+        self.table['LCL'] = 1
+        self.table['ARG'] = 2
+        self.table['THIS'] = 3
+        self.table['THAT'] = 4
+        for i in range(16):
+            self.table[f'R{i}'] = i
+        self.table['SCREEN'] = 16384
+        self.table['KBD'] = 24576
+
+    def add_ram_symbol(self, symbol):
+        self.table[symbol] = self.current_ram_address
+        self.current_ram_address += 1
+
+    def add_rom_symbol(self, symbol, address):
         self.table[symbol] = address
 
     def get(self, symbol):
