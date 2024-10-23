@@ -18,8 +18,6 @@ def conv_first(filename):
             case 'C_COMMAND':
                 rom_address += 1
 
-    return hack
-
 
 def conv_second(filename):
     parser = Parser(filename)
@@ -61,7 +59,7 @@ if __name__ == '__main__':
     if not asm_file_name.endswith('.asm'):
         raise ValueError('Please input .asm file')
 
-    # ファイル名の設定 
+    # ファイル名の設定
     hack_file_name = asm_file_name.replace('.asm', '.hack')
     current_dir = os.path.dirname(__file__)
     parent_dir = os.path.dirname(current_dir)
