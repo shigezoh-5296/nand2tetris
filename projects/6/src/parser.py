@@ -24,7 +24,7 @@ class Parser:
             lines = f.readlines()
         lines = [line.strip() for line in lines if line.strip()
                  and not line.strip().startswith('//')]
-        # 途中の空白やコメントも削除
+        # 途中のコメントも削除
         lines = [line.split('//')[0].strip() for line in lines]
         return lines
 
