@@ -19,38 +19,41 @@ class CodeWriter:
     def write_arithmetic(self, command):
         asm_code = []
         if command == 'add':
-            # add                       Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
+            # add                             Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
             asm_code.extend([
-                '@SP',      # A=0,   M=RAM[0],   D=0,  RAM[0]=258, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'AM=M-1',   # A=257, M=RAM[257], D=0,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'D=M',      # A=257, M=RAM[257], D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                '@SP',      # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'AM=M-1',   # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'M=D+M',    # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=5
-                '@SP',      # A=0,   M=RAM[0],   D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=5
-                'M=M+1'     # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=5
+                '@SP',                        # A=0,   M=RAM[0],   D=0,  RAM[0]=258, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'AM=M-1',                     # A=257, M=RAM[257], D=0,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'D=M',                        # A=257, M=RAM[257], D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                '@SP',                        # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'AM=M-1',                     # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'M=D+M',                      # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=5
+                '@SP',                        # A=0,   M=RAM[0],   D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=5
+                'M=M+1'                       # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=5
             ])
+
         elif command == 'sub':
-            # sub           Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
+            # sub                             Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
             asm_code.extend([
-                '@SP',      # A=0,   M=RAM[0],   D=0,  RAM[0]=258, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'AM=M-1',   # A=257, M=RAM[257], D=0,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'D=M',      # A=257, M=RAM[257], D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                '@SP',      # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'AM=M-1',   # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=3
-                'M=M-D',    # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=1
-                '@SP',      # A=0,   M=RAM[0],   D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=1
-                'M=M+1'     # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=1
+                '@SP',                        # A=0,   M=RAM[0],   D=0,  RAM[0]=258, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'AM=M-1',                     # A=257, M=RAM[257], D=0,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'D=M',                        # A=257, M=RAM[257], D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                '@SP',                        # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'AM=M-1',                     # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=3
+                'M=M-D',                      # A=256, M=RAM[256], D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=1
+                '@SP',                        # A=0,   M=RAM[0],   D=2,  RAM[0]=256, RAM[258]=0, RAM[257]=2, RAM[256]=1
+                'M=M+1'                       # A=0,   M=RAM[0],   D=2,  RAM[0]=257, RAM[258]=0, RAM[257]=2, RAM[256]=1
             ])
+
         elif command == 'neg':
-            # neg           Ex) RAM[0]=SP=257, RAM[256]=2
+            # neg                             Ex) RAM[0]=SP=257, RAM[256]=2
             asm_code.extend([
-                '@SP',      # A=0,   M=RAM[0],   D=0,  RAM[0]=257, RAM[257]=0, RAM[256]=2
-                'AM=M-1',   # A=256, M=RAM[256], D=0,  RAM[0]=256, RAM[257]=0, RAM[256]=2
-                'M=-M',     # A=256, M=RAM[256], D=0,  RAM[0]=256, RAM[257]=0, RAM[256]=-2
-                '@SP',      # A=0,   M=RAM[0],   D=0,  RAM[0]=256, RAM[257]=0, RAM[256]=-2
-                'M=M+1'     # A=0,   M=RAM[0],   D=0,  RAM[0]=257, RAM[257]=0, RAM[256]=-2
+                '@SP',                        # A=0,   M=RAM[0],   D=0,  RAM[0]=257, RAM[257]=0, RAM[256]=2
+                'AM=M-1',                     # A=256, M=RAM[256], D=0,  RAM[0]=256, RAM[257]=0, RAM[256]=2
+                'M=-M',                       # A=256, M=RAM[256], D=0,  RAM[0]=256, RAM[257]=0, RAM[256]=-2
+                '@SP',                        # A=0,   M=RAM[0],   D=0,  RAM[0]=256, RAM[257]=0, RAM[256]=-2
+                'M=M+1'                       # A=0,   M=RAM[0],   D=0,  RAM[0]=257, RAM[257]=0, RAM[256]=-2
             ])
+
         elif command == 'eq':
             # eq                              Ex) RAM[0]=SP=258, RAM[257]=y, RAM[256]=x
             asm_code.extend([
@@ -61,7 +64,7 @@ class CodeWriter:
                 'AM=M-1',                     # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'D=M-D',                      # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 f'@EQ_S-{self.eq_count}',     # A=EQ_S-N, M=RAM[EQ_S-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
-                'D;JEQ'
+                'D;JEQ',
                 # FALSEの場合(x-y!=0)
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
@@ -69,14 +72,19 @@ class CodeWriter:
                 f'@EQ_E-{self.eq_count}',     # A=EQ_E-N, M=RAM[EQ_E-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=0
                 '0;JMP',
                 # TRUEの場合(x-y=0)
-                f'(EQ_S-{self.eq_count})',    # A=EQ_S-N, M=RAM[EQ_S-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
+                f'(EQ_S-{self.eq_count})',    # TRUEの場合のJUMP先
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'M=-1',                       # A=256,    M=-1,          D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
-                # FALSEの場合のJUMP先
-                f'(EQ_E-{self.eq_count})',    # A=EQ_E-N, M=RAM[EQ_E-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
+
+                f'(EQ_E-{self.eq_count})',
+                '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
+                'M=M+1'                       # A=0,      M=RAM[0],      D=x-y, RAM[0]=257, RAM[257]=y, RAM[256]=-1
             ])
+            self.eq_count += 1
+
         elif command == 'gt':
+            # gt                              Ex) RAM[0]=SP=258, RAM[257]=y, RAM[256]=x
             asm_code.extend([
                 '@SP',                        # A=0,      M=RAM[0],      D=0,   RAM[0]=258, RAM[257]=y, RAM[256]=x
                 'AM=M-1',                     # A=257,    M=RAM[257],    D=0,   RAM[0]=257, RAM[257]=y, RAM[256]=x
@@ -85,7 +93,7 @@ class CodeWriter:
                 'AM=M-1',                     # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'D=M-D',                      # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 f'@GT_S-{self.gt_count}',     # A=GT_S-N, M=RAM[GT_S-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
-                'D;JGT'
+                'D;JGT',
                 # FALSEの場合(x<=y)
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
@@ -93,14 +101,19 @@ class CodeWriter:
                 f'@GT_E-{self.gt_count}',     # A=GT_E-N, M=RAM[GT_E-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=0
                 '0;JMP',
                 # TRUEの場合(x>y=0)
-                f'(GT_S-{self.gt_count})',    # A=GT_S-N, M=RAM[GT_S-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
+                f'(GT_S-{self.gt_count})',
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'M=-1',                       # A=256,    M=-1,          D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
-                # FALSEの場合のJUMP先
-                f'(GT_E-{self.gt_count})',    # A=GT_E-N, M=RAM[GT_E-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
+                
+                f'(GT_E-{self.gt_count})',
+                '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
+                'M=M+1'                       # A=0,      M=RAM[0],      D=x-y, RAM[0]=257, RAM[257]=y, RAM[256]=-1
             ])
+            self.gt_count += 1
+
         elif command == 'lt':
+            # lt                              Ex) RAM[0]=SP=258, RAM[257]=y, RAM[256]=x
             asm_code.extend([
                 '@SP',                        # A=0,      M=RAM[0],      D=0,   RAM[0]=258, RAM[257]=y, RAM[256]=x
                 'AM=M-1',                     # A=257,    M=RAM[257],    D=0,   RAM[0]=257, RAM[257]=y, RAM[256]=x
@@ -109,7 +122,7 @@ class CodeWriter:
                 'AM=M-1',                     # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'D=M-D',                      # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 f'@LT_S-{self.lt_count}',     # A=LT_S-N, M=RAM[LT_S-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
-                'D;JLT'
+                'D;JLT',
                 # FALSEの場合(x>=y)
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
@@ -117,25 +130,53 @@ class CodeWriter:
                 f'@LT_E-{self.lt_count}',     # A=LT_E-N, M=RAM[LT_E-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=0
                 '0;JMP',
                 # TRUEの場合(x<y=0)
-                f'(LT_S-{self.lt_count})',    # A=LT_S-N, M=RAM[LT_S-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
+                f'(LT_S-{self.lt_count})',
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'M=-1',                       # A=256,    M=-1,          D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
-                # FALSEの場合のJUMP先
+
                 f'(LT_E-{self.lt_count})',    # A=LT_E-N, M=RAM[LT_E-N], D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
+                '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
+                'M=M+1'                       # A=0,      M=RAM[0],      D=x-y, RAM[0]=257, RAM[257]=y, RAM[256]=-1
             ])
+            self.lt_count += 1
+
         elif command == 'and':
-            # and                            Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
-            # 後から実装
-            pass
+            # and                             Ex) RAM[0]=SP=258, RAM[257]=y, RAM[256]=x
+            asm_code.extend([
+                '@SP',                        # A=0,      M=RAM[0],      D=0,   RAM[0]=258, RAM[257]=y, RAM[256]=x
+                'AM=M-1',                     # A=257,    M=RAM[257],    D=0,   RAM[0]=257, RAM[257]=y, RAM[256]=x
+                'D=M',                        # A=257,    M=RAM[257],    D=y,   RAM[0]=257, RAM[257]=y, RAM[256]=x
+                '@SP',                        # A=0,      M=RAM[0],      D=y,   RAM[0]=257, RAM[257]=y, RAM[256]=x
+                'AM=M-1',                     # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x
+                'M=D&M',                      # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x&y
+                '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x&y
+                'M=M+1'                       # A=0,      M=RAM[0],      D=x-y, RAM[0]=257, RAM[257]=y, RAM[256]=x&y
+            ])
+
         elif command == 'or':
-            # or                             Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
-            # 後から実装
-            pass
+            # or                              Ex) RAM[0]=SP=258, RAM[257]=y, RAM[256]=x
+            asm_code.extend([
+                '@SP',                        # A=0,      M=RAM[0],      D=0,   RAM[0]=258, RAM[257]=y, RAM[256]=x
+                'AM=M-1',                     # A=257,    M=RAM[257],    D=0,   RAM[0]=257, RAM[257]=y, RAM[256]=x
+                'D=M',                        # A=257,    M=RAM[257],    D=y,   RAM[0]=257, RAM[257]=y, RAM[256]=x
+                '@SP',                        # A=0,      M=RAM[0],      D=y,   RAM[0]=257, RAM[257]=y, RAM[256]=x
+                'AM=M-1',                     # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x
+                'M=D|M',                      # A=256,    M=RAM[256],    D=y,   RAM[0]=256, RAM[257]=y, RAM[256]=x|y
+                '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x|y
+                'M=M+1'                       # A=0,      M=RAM[0],      D=x-y, RAM[0]=257, RAM[257]=y, RAM[256]=x|y
+            ])
+
         elif command == 'not':
-            # not                            Ex) RAM[0]=SP=258, RAM[257]=2
-            # 後から実装
-            pass
+            # not                             Ex) RAM[0]=SP=257, RAM[256]=x
+            asm_code.extend([
+                '@SP',                        # A=0,      M=RAM[0],      D=0,   RAM[0]=257, RAM[256]=x
+                'AM=M-1',                     # A=256,    M=RAM[256],    D=0,   RAM[0]=256, RAM[256]=x
+                'M=!M',                       # A=256,    M=RAM[256],    D=0,   RAM[0]=256, RAM[256]=!x
+                '@SP',                        # A=0,      M=RAM[0],      D=0,   RAM[0]=256, RAM[256]=!x
+                'M=M+1'                       # A=0,      M=RAM[0],      D=0,   RAM[0]=257, RAM[256]=!x
+            ])
+
         else:
             raise ValueError('Invalid command: {}'.format(command))
 
