@@ -186,32 +186,77 @@ class CodeWriter:
         asm_code = []
         if command == 'C_PUSH':
             if segment == 'constant':
-                # push constant x              Ex) RAM[0]=SP=256, RAM[256]=0
+                # push constant N             Ex) RAM[0]=SP=256, RAM[256]=0
                 asm_code.extend([
-                    '@' + index,   # A=x,   M=RAM[x],   D=0,  RAM[0]=256, RAM[256]=0
-                    'D=A',         # A=x,   M=RAM[x],   D=x,  RAM[0]=256, RAM[256]=0
-                    '@SP',         # A=0,   M=RAM[0],   D=x,  RAM[0]=256, RAM[256]=0
-                    'A=M',         # A=256, M=RAM[256], D=x,  RAM[0]=256, RAM[256]=0
-                    'M=D',         # A=256, M=RMA[256], D=x,  RAM[0]=256, RAM[256]=x
-                    '@SP',         # A=0,   M=RAM[0],   D=x,  RAM[0]=256, RAM[256]=x
-                    'M=M+1'        # A=0,   M=RAM[0],   D=x,  RAM[0]=257, RAM[256]=x
+                    '@' + index,              # A=N,   M=RAM[N],   D=0,  RAM[0]=256, RAM[256]=0
+                    'D=A',                    # A=N,   M=RAM[N],   D=N,  RAM[0]=256, RAM[256]=0
+                    '@SP',                    # A=0,   M=RAM[0],   D=N,  RAM[0]=256, RAM[256]=0
+                    'A=M',                    # A=256, M=RAM[256], D=N,  RAM[0]=256, RAM[256]=0
+                    'M=D',                    # A=256, M=RMA[256], D=N,  RAM[0]=256, RAM[256]=N
+                    '@SP',                    # A=0,   M=RAM[0],   D=N,  RAM[0]=256, RAM[256]=N
+                    'M=M+1'                   # A=0,   M=RAM[0],   D=N,  RAM[0]=257, RAM[256]=N
                 ])
+
             elif segment == 'local':
-                # push local x                       Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # push local 0                Ex) RAM[0]=SP=256, RAM[1]=LCL=1000, RAM[256]=0, RAM[1000]=5
+                asm_code.extend([
+                    '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5 
+                    'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
+                    '@LCL',                   # A=1,    M=RAM[1],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
+                    'A=D+A',                  # A=1000, M=RAM[1000], D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
+                    'D=M',                    # A=1000, M=RAM[1000], D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
+                    'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
+                    'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=5, RAM[1000]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=5, RAM[1000]=5
+                    'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=1000, RAM[256]=5, RAM[1000]=5
+                ])
+
             elif segment == 'argument':
-                # push argument x                    Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # push argument 0             Ex) RAM[0]=SP=256, RAM[2]=ARG=2000, RAM[256]=0, RAM[2000]=5
+                asm_code.extend([
+                    '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5 
+                    'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    '@ARG',                   # A=1,    M=RAM[1],    D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    'A=D+A',                  # A=2000, M=RAM[2000], D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    'D=M',                    # A=2000, M=RAM[2000], D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=5, RAM[2000]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=5, RAM[2000]=5
+                    'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=2000, RAM[256]=5, RAM[2000]=5
+                ])
+
             elif segment == 'this':
-                # push this x                        Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # push this 0                 Ex) RAM[0]=SP=256, RAM[3]=THIS=2048, RAM[256]=0, RAM[2048]=5
+                asm_code.extend([
+                    '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    '@THIS',                  # A=3,    M=RAM[3],    D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    'A=D+A',                  # A=2048, M=RAM[2048], D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    'D=M',                    # A=2048, M=RAM[2048], D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=5, RAM[2048]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=5, RAM[2048]=5
+                    'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=2048, RAM[256]=5, RAM[2048]=5
+                ])
+
             elif segment == 'that':
-                # push that x                        Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # push that 0                 Ex) RAM[0]=SP=256, RAM[4]=THAT=3048, RAM[256]=0, RAM[3048]=5
+                asm_code.extend([
+                    '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    '@THAT',                  # A=4,    M=RAM[4],    D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    'A=D+A',                  # A=3048, M=RAM[3048], D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    'D=M',                    # A=3048, M=RAM[3048], D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
+                    'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
+                ])
+
             elif segment == 'pointer':
                 # push pointer x                     Ex) RAM[0]=SP=256, RAM[257]=3, RAM[256]=4
                 # 後から実装
@@ -226,23 +271,84 @@ class CodeWriter:
                 pass
             else:
                 raise ValueError('Invalid segment: {}'.format(segment))
+
         elif command == 'C_POP':
             if segment == 'local':
-                # pop local x                        Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # pop local 2                Ex) RAM[0]=SP=257, RAM[1]=LCL=1000, RAM[256]=5, RAM[1000]=0, RAM[1002]=0
+                asm_code.extend([
+                    '@' + index,              # A=2,    M=RAM[2],    D=0,  RAM[0]=257, RAM[1]=1000, RAM[1000]=0, RAM[1002]=0
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=257, RAM[1]=1000, RAM[1000]=0, RAM[1002]=0
+                    '@LCL',                   # A=1,    M=RAM[1],    D=2,  RAM[0]=257, RAM[1]=1000, RAM[1000]=0, RAM[1002]=0
+                    'M=D+M',                  # A=1,    M=RAM[1],    D=2,  RAM[0]=257, RAM[1]=1002, RAM[1000]=0, RAM[1002]=0
+                    '@SP',                    # A=0,    M=RAM[0],    D=2,  RAM[0]=257, RAM[1]=1002, RAM[1000]=0, RAM[1002]=0
+                    'AM=M-1',                 # A=256,  M=RAM[256],  D=2,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=0
+                    'D=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=0
+                    '@LCL',                   # A=1,    M=RAM[1],    D=5,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=0
+                    'A=M',                    # A=1002, M=RAM[1002], D=5,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=0
+                    'M=D',                    # A=1002, M=RAM[1002], D=5,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=5
+                    '@' + index,              # A=2,    M=RAM[2],    D=5,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=5
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=5
+                    '@LCL',                   # A=1,    M=RAM[1],    D=2,  RAM[0]=256, RAM[1]=1002, RAM[1000]=0, RAM[1002]=5
+                    'M=M-D'                   # A=1,    M=RAM[1],    D=2,  RAM[0]=256, RAM[1]=1000, RAM[1000]=0, RAM[1002]=5
+                ])
+
             elif segment == 'argument':
-                # pop argument x                     Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # pop argument 2             Ex) RAM[0]=SP=257, RAM[2]=ARG=2000, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                asm_code.extend([
+                    '@' + index,              # A=2,    M=RAM[2],    D=0,  RAM[0]=257, RAM[2]=2000, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=257, RAM[2]=2000, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    '@ARG',                   # A=2,    M=RAM[2],    D=2,  RAM[0]=257, RAM[2]=2000, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    'M=D+M',                  # A=2,    M=RAM[2],    D=2,  RAM[0]=257, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    '@SP',                    # A=0,    M=RAM[0],    D=2,  RAM[0]=257, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    'AM=M-1',                 # A=256,  M=RAM[256],  D=2,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    'D=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    '@ARG',                   # A=2,    M=RAM[2],    D=5,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    'A=M',                    # A=2002, M=RAM[2002], D=5,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=0
+                    'M=D',                    # A=2002, M=RAM[2002], D=5,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=5
+                    '@' + index,              # A=2,    M=RAM[2],    D=5,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=5
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=5
+                    '@ARG',                   # A=2,    M=RAM[2],    D=2,  RAM[0]=256, RAM[2]=2002, RAM[256]=5, RAM[2000]=0, RAM[2002]=5
+                    'M=M-D'                   # A=2,    M=RAM[2],    D=2,  RAM[0]=256, RAM[2]=2000, RAM[256]=5, RAM[2000]=0, RAM[2002]=5
+                ])
+
             elif segment == 'this':
-                # pop this x                         Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # pop this 2                 Ex) RAM[0]=SP=257, RAM[3]=THIS=2048, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                asm_code.extend([
+                    '@' + index,              # A=2,    M=RAM[2],    D=0,  RAM[0]=257, RAM[3]=2048, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=257, RAM[3]=2048, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    '@THIS',                  # A=3,    M=RAM[3],    D=2,  RAM[0]=257, RAM[3]=2048, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    'M=D+M',                  # A=3,    M=RAM[3],    D=2,  RAM[0]=257, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    '@SP',                    # A=0,    M=RAM[0],    D=2,  RAM[0]=257, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    'AM=M-1',                 # A=256,  M=RAM[256],  D=2,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    'D=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    '@THIS',                  # A=3,    M=RAM[3],    D=5,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    'A=M',                    # A=2050, M=RAM[2050], D=5,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=0
+                    'M=D',                    # A=2050, M=RAM[2050], D=5,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=5
+                    '@' + index,              # A=2,    M=RAM[2],    D=5,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=5
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=5
+                    '@THIS',                  # A=3,    M=RAM[3],    D=2,  RAM[0]=256, RAM[3]=2050, RAM[256]=5, RAM[2048]=0, RAM[2050]=5
+                    'M=M-D'                   # A=3,    M=RAM[3],    D=2,  RAM[0]=256, RAM[3]=2048, RAM[256]=5, RAM[2048]=0, RAM[2050]=5
+                ])
+
             elif segment == 'that':
-                # pop that x                         Ex) RAM[0]=SP=256, RAM[257]=2, RAM[256]=3
-                # 後から実装
-                pass
+                # pop that 2                 Ex) RAM[0]=SP=257, RAM[4]=THAT=3048, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                asm_code.extend([
+                    '@' + index,              # A=2,    M=RAM[2],    D=0,  RAM[0]=257, RAM[4]=3048, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=257, RAM[4]=3048, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    '@THAT',                  # A=4,    M=RAM[4],    D=2,  RAM[0]=257, RAM[4]=3048, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    'M=D+M',                  # A=4,    M=RAM[4],    D=2,  RAM[0]=257, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    '@SP',                    # A=0,    M=RAM[0],    D=2,  RAM[0]=257, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    'AM=M-1',                 # A=256,  M=RAM[256],  D=2,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    'D=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    '@THAT',                  # A=4,    M=RAM[4],    D=5,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    'A=M',                    # A=3050, M=RAM[3050], D=5,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=0
+                    'M=D',                    # A=3050, M=RAM[3050], D=5,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=5
+                    '@' + index,              # A=2,    M=RAM[2],    D=5,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=5
+                    'D=A',                    # A=2,    M=RAM[2],    D=2,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=5
+                    '@THAT',                  # A=4,    M=RAM[4],    D=2,  RAM[0]=256, RAM[4]=3050, RAM[256]=5, RAM[3048]=0, RAM[3050]=5
+                    'M=M-D'                   # A=4,    M=RAM[4],    D=2,  RAM[0]=256, RAM[4]=3048, RAM[256]=5, RAM[3048]=0, RAM[3050]=5
+                ])
+
             elif segment == 'pointer':
                 # pop pointer x                      Ex) RAM[0]=SP=256, RAM[257]=3, RAM[256]=4
                 # 後から実装
