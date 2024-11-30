@@ -198,18 +198,18 @@ class CodeWriter:
                 ])
 
             elif segment == 'local':
-                # push local 0                Ex) RAM[0]=SP=256, RAM[1]=LCL=1000, RAM[256]=0, RAM[1000]=5
+                # push local 2                Ex) RAM[0]=SP=256, RAM[1]=LCL=1000, RAM[256]=0, RAM[1002]=5
                 asm_code.extend([
-                    '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5 
-                    'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
-                    '@LCL',                   # A=1,    M=RAM[1],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
-                    'A=D+A',                  # A=1000, M=RAM[1000], D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
-                    'D=M',                    # A=1000, M=RAM[1000], D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
-                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
-                    'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1000]=5
-                    'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=5, RAM[1000]=5
-                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=5, RAM[1000]=5
-                    'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=1000, RAM[256]=5, RAM[1000]=5
+                    '@' + index,              # A=2,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5 
+                    'D=A',                    # A=2,    M=RAM[0],    D=2,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5
+                    '@LCL',                   # A=1,    M=RAM[1],    D=2,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5
+                    'A=D+M',                  # A=1002, M=RAM[1002], D=2,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5
+                    'D=M',                    # A=1002, M=RAM[1002], D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5
+                    'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=0, RAM[1002]=5
+                    'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=5, RAM[1002]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=1000, RAM[256]=5, RAM[1002]=5
+                    'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=1000, RAM[256]=5, RAM[1002]=5
                 ])
 
             elif segment == 'argument':
@@ -218,7 +218,7 @@ class CodeWriter:
                     '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5 
                     'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
                     '@ARG',                   # A=1,    M=RAM[1],    D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
-                    'A=D+A',                  # A=2000, M=RAM[2000], D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
+                    'A=D+M',                  # A=2000, M=RAM[2000], D=0,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
                     'D=M',                    # A=2000, M=RAM[2000], D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
                     '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
                     'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=2000, RAM[256]=0, RAM[2000]=5
@@ -233,7 +233,7 @@ class CodeWriter:
                     '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
                     'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
                     '@THIS',                  # A=3,    M=RAM[3],    D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
-                    'A=D+A',                  # A=2048, M=RAM[2048], D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
+                    'A=D+M',                  # A=2048, M=RAM[2048], D=0,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
                     'D=M',                    # A=2048, M=RAM[2048], D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
                     '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
                     'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=2048, RAM[256]=0, RAM[2048]=5
@@ -248,12 +248,12 @@ class CodeWriter:
                     '@' + index,              # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
                     'D=A',                    # A=0,    M=RAM[0],    D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
                     '@THAT',                  # A=4,    M=RAM[4],    D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
-                    'A=D+A',                  # A=3048, M=RAM[3048], D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
+                    'A=D+M',                  # A=3048, M=RAM[3048], D=0,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
                     'D=M',                    # A=3048, M=RAM[3048], D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
                     '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
                     'A=M',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=0, RAM[3048]=5
                     'M=D',                    # A=256,  M=RAM[256],  D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
-                    '@SP',                    # A=0,    M=RAM[0],    D=5,  RAM[0]=256, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
+                    '@SP',                    # A=0,    M=RAM[0],    D5,   RAM[0]=256, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
                     'M=M+1'                   # A=0,    M=RAM[0],    D=5,  RAM[0]=257, RAM[1]=3048, RAM[256]=5, RAM[3048]=5
                 ])
 
@@ -297,9 +297,17 @@ class CodeWriter:
                 ])
 
             elif segment == 'static':
-                # push static x                      Ex) RAM[0]=SP=256, RAM[257]=16, RAM[256]=17
-                # 後から実装
-                pass
+                # push static 3               Ex) RAM[0]=SP=256, RAM[256]=0, "input_file_name.3"=RAM[16]=5
+                asm_code.extend([
+                    '@' + self.input_filename + '.' + index,  # A=filename.3, M=RAM[filename.3], D=0,  RAM[0]=256, RAM[256]=0, RAM[16]=5
+                    'D=M',                                    # A=filename.3, M=RAM[filename.3], D=5,  RAM[0]=256, RAM[256]=0, RAM[16]=5
+                    '@SP',                                    # A=0,          M=RAM[0],          D=5,  RAM[0]=256, RAM[256]=0, RAM[16]=5
+                    'A=M',                                    # A=256,        M=RAM[256],        D=5,  RAM[0]=256, RAM[256]=0, RAM[16]=5
+                    'M=D',                                    # A=256,        M=RAM[256],        D=5,  RAM[0]=256, RAM[256]=5, RAM[16]=5
+                    '@SP',                                    # A=0,          M=RAM[0],          D=5,  RAM[0]=256, RAM[256]=5, RAM[16]=5
+                    'M=M+1'                                   # A=0,          M=RAM[0],          D=5,  RAM[0]=257, RAM[256]=5, RAM[16]=5
+                ])
+
             else:
                 raise ValueError('Invalid segment: {}'.format(segment))
 
@@ -403,20 +411,26 @@ class CodeWriter:
                     raise ValueError('Invalid index: {}'.format(index))
 
             elif segment == 'temp':
-                # pop temp 3                 Ex) RAM[0]=SP=257, RAM[5]=0, RAM[8]=5, RAM[256]=5
+                # pop temp 3                  Ex) RAM[0]=SP=257, RAM[5]=0, RAM[8]=5, RAM[256]=5
                 address = 5 + int(index)
                 asm_code.extend([
-                    '@SP',                 # A=0,    M=RAM[0],    D=257,  RAM[0]=257, RAM[5]=0, RAM[8]=5, RAM[256]=5
-                    'AM=M-1',              # A=256,  M=RAM[256],  D=257,  RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
-                    'D=M',                 # A=256,  M=RAM[256],  D=5,    RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
-                    '@' + str(address),         # A=8,    M=RAM[8],    D=5,    RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
-                    'M=D'                  # A=8,    M=RAM[8],    D=5,    RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
+                    '@SP',                     # A=0,    M=RAM[0],    D=257,  RAM[0]=257, RAM[5]=0, RAM[8]=5, RAM[256]=5
+                    'AM=M-1',                  # A=256,  M=RAM[256],  D=257,  RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
+                    'D=M',                     # A=256,  M=RAM[256],  D=5,    RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
+                    '@' + str(address),        # A=8,    M=RAM[8],    D=5,    RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
+                    'M=D'                      # A=8,    M=RAM[8],    D=5,    RAM[0]=256, RAM[5]=0, RAM[8]=5, RAM[256]=5
                 ])
 
             elif segment == 'static':
-                # pop static x                       Ex) RAM[0]=SP=256, RAM[257]=16, RAM[256]=17
-                # 後から実装
-                pass
+                # pop static 3                Ex) RAM[0]=SP=257, RAM[256]=5, "input_file_name.3"=RAM[16]=0
+                asm_code.extend([
+                    '@SP',                                    # A=0,          M=RAM[0],          D=257,  RAM[0]=257, RAM[256]=5, RAM[16]=0
+                    'AM=M-1',                                 # A=256,        M=RAM[256],        D=257,  RAM[0]=256, RAM[256]=5, RAM[16]=0
+                    'D=M',                                    # A=256,        M=RAM[256],        D=5,    RAM[0]=256, RAM[256]=5, RAM[16]=0
+                    '@' + self.input_filename + '.' + index,  # A=filename.3, M=RAM[filename.3], D=5,    RAM[0]=256, RAM[256]=5, RAM[16]=0
+                    'M=D'                                     # A=filename.3, M=RAM[filename.3], D=5,    RAM[0]=256, RAM[256]=5, RAM[16]=5
+                ])
+
             else:
                 raise ValueError('Invalid segment: {}'.format(segment))
         else:
