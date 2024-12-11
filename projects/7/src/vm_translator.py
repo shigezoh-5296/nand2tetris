@@ -29,6 +29,12 @@ if __name__ == '__main__':
                     elif command_type in ['C_PUSH', 'C_POP']:
                         cw.write_push_pop(command_type, parser.arg1(),
                                           parser.arg2())
+                    elif command_type == 'C_LABEL':
+                        cw.write_label(parser.arg1())
+                    elif command_type == 'C_GOTO':
+                        cw.write_goto(parser.arg1())
+                    elif command_type == 'C_IF':
+                        cw.write_if(parser.arg1())
                     else:
                         raise ValueError(
                             'Invalid command type: {}'.format(command_type))

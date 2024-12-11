@@ -438,5 +438,29 @@ class CodeWriter:
 
         self.f.write('\n'.join(asm_code) + '\n')
 
+    def write_label(self, label):
+        asm_code = []
+        asm_code.extend([f'({label})'])
+        self.f.write('\n'.join(asm_code) + '\n')
+
+    def write_goto(self, label):
+        asm_code = []
+        asm_code.extend([
+            f'@{label}',
+            '0;JMP'
+        ])
+        self.f.write('\n'.join(asm_code) + '\n')
+
+    def write_if(self, label):
+        asm_code = []
+        asm_code.extend([
+            '@SP',
+            'AM=M-1',
+            'D=M',
+            f'@{label}',
+            'D;JNE'
+        ])
+        self.f.write('\n'.join(asm_code) + '\n')
+
     def close(self):
         self.f.close()
