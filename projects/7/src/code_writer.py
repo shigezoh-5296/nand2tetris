@@ -105,7 +105,7 @@ class CodeWriter:
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'A=M',                        # A=256,    M=RAM[256],    D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=x
                 'M=-1',                       # A=256,    M=-1,          D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
-                
+
                 f'(GT_E-{self.gt_count})',
                 '@SP',                        # A=0,      M=RAM[0],      D=x-y, RAM[0]=256, RAM[257]=y, RAM[256]=-1
                 'M=M+1'                       # A=0,      M=RAM[0],      D=x-y, RAM[0]=257, RAM[257]=y, RAM[256]=-1

@@ -1,6 +1,6 @@
 import os
 import sys
-from parser import Parser
+from vm_parser import VmParser
 from code_writer import CodeWriter
 
 if __name__ == '__main__':
@@ -8,6 +8,7 @@ if __name__ == '__main__':
     # それ以外の形式ではエラーを出す
     if len(sys.argv) != 2:
         raise ValueError('Please input .asm file')
+
     if not os.path.isdir(sys.argv[1]):
         print(sys.argv[1])
         raise ValueError('Please input directory')
@@ -20,7 +21,7 @@ if __name__ == '__main__':
         for filename in filenames:
             if filename.endswith('.vm'):
                 cw.set_filename(filename)
-                parser = Parser(filename)
+                parser = VmParser(filename)
                 while parser.has_more_commands():
                     parser.advance()
                     command_type = parser.command_type()
