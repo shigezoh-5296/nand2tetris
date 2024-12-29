@@ -36,6 +36,12 @@ if __name__ == '__main__':
                         cw.write_goto(parser.arg1())
                     elif command_type == 'C_IF':
                         cw.write_if(parser.arg1())
+                    elif command_type == 'C_FUNCTION':
+                        cw.write_function(parser.arg1(), int(parser.arg2()))
+                    elif command_type == 'C_RETURN':
+                        cw.write_return()
+                    elif command_type == 'C_CALL':
+                        cw.write_call(parser.arg1(), parser.arg2())
                     else:
                         raise ValueError(
                             'Invalid command type: {}'.format(command_type))

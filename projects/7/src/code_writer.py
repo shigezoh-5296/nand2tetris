@@ -7,6 +7,7 @@ class CodeWriter:
         self.eq_count = 0
         self.gt_count = 0
         self.lt_count = 0
+        self.return_address_count = 0
         try:
             self.f = open(os.path.join(directory, filename + '.asm'), 'w')
         except IOError as e:
@@ -459,6 +460,143 @@ class CodeWriter:
             'D=M',
             f'@{label}',
             'D;JNE'
+        ])
+        self.f.write('\n'.join(asm_code) + '\n')
+
+    def write_call(self, function_name, num_args):
+        asm_code = []
+        subtrahend = 5 + num_args
+        asm_code.extend([
+            # push return-address
+            f'@return-address.{self.return_address_count}',
+            'D=A',
+            '@SP',
+            'A=M',
+            'M=D',
+            '@SP',
+            'M=M+1',
+            # push LCL
+            '@LCL',
+            'D=M',
+            '@SP',
+            'A=M',
+            'M=D',
+            '@SP',
+            'M=M+1',
+            # push ARG
+            '@ARG',
+            'D=M',
+            '@SP',
+            'A=M',
+            'M=D',
+            '@SP',
+            'M=M+1',
+            # push THIS
+            '@THIS',
+            'D=M',
+            '@SP',
+            'A=M',
+            'M=D',
+            '@SP',
+            'M=M+1',
+            # push THAT
+            '@THAT',
+            'D=M',
+            '@SP',
+            'A=M',
+            'M=D',
+            '@SP',
+            'M=M+1',
+            # ARG = SP-n-5
+            '@SP',
+            'D=M',
+            f'@{subtrahend}',
+            'D=D-A',
+            '@ARG',
+            'M=D',
+            # LCL = SP
+            '@SP',
+            'D=M',
+            '@LCL',
+            'M=D',
+        ])
+        self.f.write('\n'.join(asm_code) + '\n')
+        # goto function_name
+        self.write_goto(function_name)
+        # (return-address)
+        self.write_label(f'return-address.{self.return_address_count}')
+
+        self.return_address_count += 1
+
+    def write_function(self, function_name, num_locals):
+        asm_code = []
+        asm_code.extend([
+            f'({function_name})',
+            '@LCL',
+            'A=M'
+        ])
+        for _ in range(num_locals):
+            asm_code.extend([
+                # ローカル変数の初期化
+                'M=0',
+                'A=A+1'
+            ])
+        self.f.write('\n'.join(asm_code) + '\n')
+
+    def write_return(self):
+        asm_code = []
+        asm_code.extend([
+            # FRAME = LCL
+            '@LCL',
+            'D=M',
+            '@R13',
+            'M=D',
+            # RET = *(FRAME-5)
+            '@5',
+            'A=D-A',
+            'D=M',
+            '@R14',
+            'M=D',
+            # *ARG = pop()
+            '@SP',
+            'AM=M-1',
+            'D=M',
+            '@ARG',
+            'A=M',
+            'M=D',
+            # SP = ARG+1
+            '@ARG',
+            'D=M+1',
+            '@SP',
+            'M=D',
+            # THAT = *(FRAME-1)
+            '@R13',
+            'AM=M-1',
+            'D=M',
+            '@THAT',
+            'M=D',
+            # THIS = *(FRAME-2)
+            '@R13',
+            'AM=M-1',
+            'D=M',
+            '@THIS',
+            'M=D',
+            # ARG = *(FRAME-3)
+            '@R13',
+            'AM=M-1',
+            'D=M',
+            '@ARG',
+            'M=D',
+            # LCL = *(FRAME-4)
+            '@R13',
+            'AM=M-1',
+            'D=M',
+            '@LCL',
+            'M=D',
+            # goto RET
+            '@R14',
+            'A=M',
+            '0;JMP'
         ])
         self.f.write('\n'.join(asm_code) + '\n')
 
