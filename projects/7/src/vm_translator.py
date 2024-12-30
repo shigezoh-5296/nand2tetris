@@ -15,13 +15,13 @@ if __name__ == '__main__':
 
     output_filename = os.path.basename(sys.argv[1])
     directory = sys.argv[1]
-    cw = CodeWriter(output_filename, directory) 
+    cw = CodeWriter(output_filename, directory)
 
-    for dirpath, _, filenames in os.walk(sys.argv[1]):
+    for dirpath, _, filenames in os.walk(directory):
         for filename in filenames:
             if filename.endswith('.vm'):
                 cw.set_filename(filename)
-                parser = VmParser(filename)
+                parser = VmParser(filename, directory)
                 while parser.has_more_commands():
                     parser.advance()
                     command_type = parser.command_type()

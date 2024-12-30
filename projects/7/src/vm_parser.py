@@ -2,26 +2,20 @@ import os
 
 
 class VmParser:
-    def __init__(self, filename, root_dir='../'):
+    def __init__(self, filename, directory):
         self.filename = filename
-        self.root_dir = root_dir
-        self.filepath = self.find_file()
-        if self.filepath is None:
-            raise FileNotFoundError(f'File {filename} not found in {root_dir}')
+        try:
+            self.f = open(os.path.join(directory, filename), 'r')
+        except FileNotFoundError:
+            print('File not found')
+            raise
         self.lines = self.get_lines()
         self.current_line = -1
         self.current_command = None
 
-    def find_file(self):
-        for dirpath, _, filenames in os.walk(self.root_dir):
-            if self.filename in filenames:
-                return os.path.join(dirpath, self.filename)
-        return None
-
     def get_lines(self):
         # 空行とコメント行（行頭が//）は削除したリストを返す
-        with open(self.filepath, 'r') as f:
-            lines = f.readlines()
+        lines = self.f.readlines()
         lines = [line.strip() for line in lines if line.strip()
                  and not line.strip().startswith('//')]
         # 途中のコメントも削除
