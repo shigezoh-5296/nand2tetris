@@ -13,11 +13,17 @@ class CodeWriter:
         except IOError as e:
             print(f"Error opening file: {e}")
             raise
+        self.write_init()
 
     def set_filename(self, filename):
         self.input_filename = filename
 
     def write_init(self):
+        debug_code = [
+            '// Initialize',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = [
             '@256',
             'D=A',
@@ -25,8 +31,14 @@ class CodeWriter:
             'M=D',
         ]
         self.f.write('\n'.join(asm_code) + '\n')
+        self.write_call('Sys.init', 0)
 
     def write_arithmetic(self, command):
+        debug_code = [
+            f'// {command}',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = []
         if command == 'add':
             # add                             Ex) RAM[0]=SP=258, RAM[257]=2, RAM[256]=3
@@ -193,6 +205,11 @@ class CodeWriter:
         self.f.write('\n'.join(asm_code) + '\n')
 
     def write_push_pop(self, command, segment, index):
+        debug_code = [
+            f'// {command} {segment} {index}',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = []
         if command == 'C_PUSH':
             if segment == 'constant':
@@ -449,12 +466,15 @@ class CodeWriter:
         self.f.write('\n'.join(asm_code) + '\n')
 
     def write_label(self, label):
-        asm_code = []
         asm_code = [f'({label})']
         self.f.write('\n'.join(asm_code) + '\n')
 
     def write_goto(self, label):
-        asm_code = []
+        debug_code = [
+            f'// goto {label}',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = [
             f'@{label}',
             '0;JMP'
@@ -462,7 +482,11 @@ class CodeWriter:
         self.f.write('\n'.join(asm_code) + '\n')
 
     def write_if(self, label):
-        asm_code = []
+        debug_code = [
+            f'// if-goto {label}',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = [
             '@SP',
             'AM=M-1',
@@ -473,7 +497,11 @@ class CodeWriter:
         self.f.write('\n'.join(asm_code) + '\n')
 
     def write_call(self, function_name, num_args):
-        asm_code = []
+        debug_code = [
+            f'// call {function_name} {num_args}',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         subtrahend = 5 + num_args
         asm_code = [
             # push return-address
@@ -538,22 +566,30 @@ class CodeWriter:
         self.return_address_count += 1
 
     def write_function(self, function_name, num_locals):
-        asm_code = []
+        debug_code = [
+            f'// function {function_name} {num_locals}',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = [
             f'({function_name})',
             '@LCL',
             'A=M'
         ]
         for _ in range(num_locals):
-            asm_code = [
+            asm_code.extend([
                 # ローカル変数の初期化
                 'M=0',
                 'A=A+1'
-            ]
+            ])
         self.f.write('\n'.join(asm_code) + '\n')
 
     def write_return(self):
-        asm_code = []
+        debug_code = [
+            '// return',
+        ]
+        self.f.write('\n'.join(debug_code) + '\n')
+
         asm_code = [
             # FRAME = LCL
             '@LCL',

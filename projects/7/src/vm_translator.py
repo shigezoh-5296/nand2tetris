@@ -41,7 +41,7 @@ if __name__ == '__main__':
                     elif command_type == 'C_RETURN':
                         cw.write_return()
                     elif command_type == 'C_CALL':
-                        cw.write_call(parser.arg1(), parser.arg2())
+                        cw.write_call(parser.arg1(), int(parser.arg2()))
                     else:
                         raise ValueError(
                             'Invalid command type: {}'.format(command_type))
