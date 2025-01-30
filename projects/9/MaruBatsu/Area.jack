@@ -1,0 +1,13 @@
+class Area {
+    field Array cells;
+
+    constructor Area new() {
+        let cells = Array.new(9);
+        let i = 0;
+        while (i < 9) {
+            let cells[i] = Cell.new();
+            let i = i + 1;
+        }
+        return this;
+    }
+}

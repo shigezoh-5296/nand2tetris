@@ -1,0 +1,41 @@
+class Game {
+    field int turn; // 1: Maru, 2: Batsu
+
+    constructor Game new() {
+        let turn = 1;
+        return this;
+    }
+
+    method void dispField() {
+        do Screen.setColor(true);
+        // 縦線
+        do Screen.drawLine(250, 50, 250, 200);
+        do Screen.drawLine(300, 50, 300, 200);
+        // 横線
+        do Screen.drawLine(200, 100, 350, 100);
+        do Screen.drawLine(200, 150, 350, 150);
+        // 行列番号の描画
+        do Output.moveCursor(6, 22);
+        do Output.printString("1");
+        do Output.moveCursor(11, 22);
+        do Output.printString("2");
+        do Output.moveCursor(16, 22);
+        do Output.printString("3");
+        do Output.moveCursor(3, 27);
+        do Output.printString("1");
+        do Output.moveCursor(3, 34);
+        do Output.printString("2");
+        do Output.moveCursor(3, 41);
+        do Output.printString("3");
+        return;
+    }
+
+    method void nextTurn() {
+        if (turn = 1) {
+            let turn = 2;
+        } else {
+            let turn = 1;
+        }
+        return;
+    }
+}

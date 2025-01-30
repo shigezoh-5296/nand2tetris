@@ -1,0 +1,9 @@
+class Main {
+    function void main() {
+        // debug
+        do View.grid();
+        do View.inputCell(1);
+        do View.putMaru(225, 75);
+        return;
+    }
+}

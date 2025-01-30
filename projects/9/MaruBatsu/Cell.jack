@@ -1,0 +1,13 @@
+class Cell {
+    field int value; // 0: empty, 1: Maru, 2: Batsu
+
+    constructor Cell new() {
+        let value = 0;
+        return this;
+    }
+
+    method void setValue(int value) {
+        let this.value = value;
+        return;
+    }
+}
