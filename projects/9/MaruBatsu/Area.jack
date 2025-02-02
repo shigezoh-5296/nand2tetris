@@ -1,13 +1,160 @@
 class Area {
-    field Array cells;
+    field Cell cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8;
 
     constructor Area new() {
-        let cells = Array.new(9);
-        let i = 0;
-        while (i < 9) {
-            let cells[i] = Cell.new();
-            let i = i + 1;
-        }
+        let cell0 = Cell.new();
+        let cell1 = Cell.new();
+        let cell2 = Cell.new();
+        let cell3 = Cell.new();
+        let cell4 = Cell.new();
+        let cell5 = Cell.new();
+        let cell6 = Cell.new();
+        let cell7 = Cell.new();
+        let cell8 = Cell.new();
         return this;
     }
+
+    method void dispose() {
+        do cell0.dispose();
+        do cell1.dispose();
+        do cell2.dispose();
+        do cell3.dispose();
+        do cell4.dispose();
+        do cell5.dispose();
+        do cell6.dispose();
+        do cell7.dispose();
+        do cell8.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void setCell(int index, int value) {
+        if (index = 0) {
+            do cell0.setValue(value);
+        } 
+        if (index = 1) {
+            do cell1.setValue(value);
+        } 
+        if (index = 2) {
+            do cell2.setValue(value);
+        }
+        if (index = 3) {
+            do cell3.setValue(value);
+        }
+        if (index = 4) {
+            do cell4.setValue(value);
+        }
+        if (index = 5) {
+            do cell5.setValue(value);
+        }
+        if (index = 6) {
+            do cell6.setValue(value);
+        }
+        if (index = 7) {
+            do cell7.setValue(value);
+        }
+        if (index = 8) {
+            do cell8.setValue(value);
+        }
+        return;
+    }
+
+    method boolean isLine(int value) {
+        var boolean result;
+        let result = false;
+
+        // 横
+        if ((cell0.getValue() = value) & (cell1.getValue() = value) & (cell2.getValue() = value)) {
+            let result = true;
+        }
+        if ((cell3.getValue() = value) & (cell4.getValue() = value) & (cell5.getValue() = value)) {
+            let result = true;
+        }
+        if ((cell6.getValue() = value) & (cell7.getValue() = value) & (cell8.getValue() = value)) {
+            let result = true;
+        }
+        // 縦
+        if ((cell0.getValue() = value) & (cell3.getValue() = value) & (cell6.getValue() = value)) {
+            let result = true;
+        }
+        if ((cell1.getValue() = value) & (cell4.getValue() = value) & (cell7.getValue() = value)) {
+            let result = true;
+        }
+        if ((cell2.getValue() = value) & (cell5.getValue() = value) & (cell8.getValue() = value)) {
+            let result = true;
+        }
+        // 斜め
+        if ((cell0.getValue() = value) & (cell4.getValue() = value) & (cell8.getValue() = value)) {
+            let result = true;
+        }
+        if ((cell2.getValue() = value) & (cell4.getValue() = value) & (cell6.getValue() = value)) {
+            let result = true;
+        }
+        return result;
+    }
 }
+
+// class area {
+//     field array cells;
+
+//     constructor area new() {
+//         var int i;
+//         let cells = array.new(9);
+//         let i = 0;
+//         while (i < 9) {
+//             let cells[i] = cell.new();
+//             let i = i + 1;
+//         }
+//         return this;
+//     }
+
+//     method void dispose() {
+//         var int i;
+//         let i = 0;
+//         while (i < 9) {
+//             do cells[i].dispose();
+//             let i = i + 1;
+//         }
+//         do memory.dealloc(this);
+//         return;
+//     }
+
+//     method void setcell(int index, int value) {
+//         do cells[index].setvalue(value);
+//         return;
+//     }
+
+//     method boolean isline(int value) {
+//         var boolean result;
+//         let result = false;
+
+//         // 横
+//         if ((cells[0].getvalue() = value) & (cells[1].getvalue() = value) & (cells[2].getvalue() = value)) {
+//             let result = true;
+//         }
+//         if ((cells[3].getvalue() = value) & (cells[4].getvalue() = value) & (cells[5].getvalue() = value)) {
+//             let result = true;
+//         }
+//         if ((cells[6].getvalue() = value) & (cells[7].getvalue() = value) & (cells[8].getvalue() = value)) {
+//             let result = true;
+//         }
+//         // 縦
+//         if ((cells[0].getvalue() = value) & (cells[3].getvalue() = value) & (cells[6].getvalue() = value)) {
+//             let result = true;
+//         }
+//         if ((cells[1].getvalue() = value) & (cells[4].getvalue() = value) & (cells[7].getvalue() = value)) {
+//             let result = true;
+//         }
+//         if ((cells[2].getvalue() = value) & (cells[5].getvalue() = value) & (cells[8].getvalue() = value)) {
+//             let result = true;
+//         }
+//         // 斜め
+//         if ((cells[0].getvalue() = value) & (cells[4].getvalue() = value) & (cells[8].getvalue() = value)) {
+//             let result = true;
+//         }
+//         if ((cells[2].getvalue() = value) & (cells[4].getvalue() = value) & (cells[6].getvalue() = value)) {
+//             let result = true;
+//         }
+//         return result;
+//     }
+// }

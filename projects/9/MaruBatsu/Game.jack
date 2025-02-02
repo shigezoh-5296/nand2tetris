@@ -1,12 +1,40 @@
 class Game {
+    static Game instance;
+    field Area area;
     field int turn; // 1: Maru, 2: Batsu
 
     constructor Game new() {
+        let area = Area.new();
         let turn = 1;
         return this;
     }
 
-    method void dispField() {
+    method void dispose() {
+        do area.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    function Game getInstance() {
+        if (instance = null) {
+            let instance = Game.new();
+        }
+        return instance;
+    }
+
+    method void play() {
+        var boolean win;
+
+        do drawField();
+        while (~win) {
+            do inputCell();
+            let win = isWin();
+            do nextTurn();
+        }
+        return;
+    }
+
+    method void drawField() {
         do Screen.setColor(true);
         // 縦線
         do Screen.drawLine(250, 50, 250, 200);
@@ -14,19 +42,93 @@ class Game {
         // 横線
         do Screen.drawLine(200, 100, 350, 100);
         do Screen.drawLine(200, 150, 350, 150);
-        // 行列番号の描画
-        do Output.moveCursor(6, 22);
-        do Output.printString("1");
-        do Output.moveCursor(11, 22);
-        do Output.printString("2");
-        do Output.moveCursor(16, 22);
-        do Output.printString("3");
-        do Output.moveCursor(3, 27);
-        do Output.printString("1");
-        do Output.moveCursor(3, 34);
-        do Output.printString("2");
-        do Output.moveCursor(3, 41);
-        do Output.printString("3");
+        return;
+    }
+
+    method void drawMaru(int cell) {
+        var int x, y;
+        
+        if (cell = 0) {
+            let x = 225;
+            let y = 75;
+        } 
+        if (cell = 1) {
+            let x = 275;
+            let y = 75;
+        } 
+        if (cell = 2) {
+            let x = 325;
+            let y = 75;
+        }
+        if (cell = 3) {
+            let x = 225;
+            let y = 125;
+        }
+        if (cell = 4) {
+            let x = 275;
+            let y = 125;
+        }
+        if (cell = 5) {
+            let x = 325;
+            let y = 125;
+        }
+        if (cell = 6) {
+            let x = 225;
+            let y = 175;
+        }
+        if (cell = 7) {
+            let x = 275;
+            let y = 175;
+        }
+        if (cell = 8) {
+            let x = 325;
+            let y = 175;
+        }
+        do Screen.drawCircle(x, y, 15);
+        return;
+    }
+
+    method void drawBatsu(int cell) {
+        var int x, y;
+        
+        if (cell = 0) {
+            let x = 225;
+            let y = 75;
+        } 
+        if (cell = 1) {
+            let x = 275;
+            let y = 75;
+        } 
+        if (cell = 2) {
+            let x = 325;
+            let y = 75;
+        }
+        if (cell = 3) {
+            let x = 225;
+            let y = 125;
+        }
+        if (cell = 4) {
+            let x = 275;
+            let y = 125;
+        }
+        if (cell = 5) {
+            let x = 325;
+            let y = 125;
+        }
+        if (cell = 6) {
+            let x = 225;
+            let y = 175;
+        }
+        if (cell = 7) {
+            let x = 275;
+            let y = 175;
+        }
+        if (cell = 8) {
+            let x = 325;
+            let y = 175;
+        }
+        do Screen.drawLine(x - 15, y - 15, x + 15, y + 15);
+        do Screen.drawLine(x - 15, y + 15, x + 15, y - 15);
         return;
     }
 
@@ -37,5 +139,29 @@ class Game {
             let turn = 1;
         }
         return;
+    }
+
+    method void inputCell() {
+        var String message;
+        var int cell;
+        
+        do Output.moveCursor(0, 0);
+        if (turn = 1) {
+            let message = "Maru's turn. Please input cell number(0-9) and Enter.";
+        } else {
+            let message = "Batsu's turn. Please input cell number(0-9) and Enter.";
+        }
+        let cell =  Keyboard.readInt(message);
+        do area.setCell(cell, turn);
+        if (turn = 1) {
+            do drawMaru(cell);
+        } else {
+            do drawBatsu(cell);
+        }
+        return;
+    }
+
+    method boolean isWin() {
+        return area.isLine(turn);
     }
 }

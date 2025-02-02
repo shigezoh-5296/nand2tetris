@@ -1,12 +1,11 @@
-function Main.main 0
-call View.grid 0
+function Main.main 1
+call Game.getInstance 0
+pop local 0
+push local 0
+call Game.play 1
 pop temp 0
-push constant 1
-call View.inputCell 1
-pop temp 0
-push constant 225
-push constant 75
-call View.putMaru 2
+push local 0
+call Game.dispose 1
 pop temp 0
 push constant 0
 return

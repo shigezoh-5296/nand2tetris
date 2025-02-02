@@ -6,8 +6,17 @@ class Cell {
         return this;
     }
 
-    method void setValue(int value) {
-        let this.value = value;
+    method void dispose() {
+        do Memory.deAlloc(this);
         return;
+    }
+
+    method void setValue(int _value) {
+        let value = _value;
+        return;
+    }
+
+    method int getValue() {
+        return value;
     }
 }
