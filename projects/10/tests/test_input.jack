@@ -1,0 +1,11 @@
+// This is a comment
+    class Main {
+        function void main() {
+            var int x; // variable declaration
+            let x = 2; /* multi-line
+            comment */
+            do Output.printInt(x);
+            return;
+        }
+    }
+    
