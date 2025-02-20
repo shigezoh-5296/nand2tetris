@@ -2,9 +2,12 @@
     class Main {
         function void main() {
             var int x; // variable declaration
+            var String str; // variable declaration
             let x = 2; /* multi-line
             comment */
+            let str = "Hello, World!"; // string literal
             do Output.printInt(x);
+            do Output.printString(str);
             return;
         }
     }
