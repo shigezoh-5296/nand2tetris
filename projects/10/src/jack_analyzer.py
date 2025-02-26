@@ -1,12 +1,15 @@
 import os
 import sys
 from jack_tokenizer import JackTokenizer
+from compilation_engine import CompilationEngine
 
 
 def analyze_file(file_path):
     tokenizer = JackTokenizer(file_path)
     xml_file_path = file_path.replace(".jack", ".xml")
-    tokenizer.output_xml(xml_file_path)
+    with open(xml_file_path, "w") as xml_file:
+        ce = CompilationEngine(tokenizer, xml_file)
+        ce.compile()
 
 
 def analyze_directory(directory_path):

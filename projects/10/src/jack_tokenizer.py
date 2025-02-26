@@ -108,6 +108,9 @@ class JackTokenizer:
     def advance(self):
         self.current_token_index += 1
 
+    def retreat(self):
+        self.current_token_index -= 1
+
     def token_type(self):
         token = self.tokens[self.current_token_index]
         if token in self.keyword_list():
