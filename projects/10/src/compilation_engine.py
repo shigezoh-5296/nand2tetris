@@ -25,7 +25,7 @@ class CompilationEngine:
             else:
                 # 想定外のケース
                 print(f'Unexpected token: {self.tokenizer.tokens[self.tokenizer.current_token_index]}')
-                self.tokenizer.advance
+                self.tokenizer.advance()
 
         self.write_token()  # '}'
 
@@ -241,11 +241,19 @@ class CompilationEngine:
             elif self.tokenizer.token_type() == 'SYMBOL' and self.tokenizer.symbol() == '.':
                 self.tokenizer.retreat()
                 self.compile_subroutine_call()
+            # elif self.tokenizer.token_type() == 'SYMBOL' and self.tokenizer.symbol() == ')':
+            #     self.tokenizer.retreat()
+            #     self.write_token()  # varName
+            #     self.write_token()  # ')'
             else:
                 self.tokenizer.retreat()
                 self.write_token()  # varName
-        elif self.tokenizer.token_type() == 'SYMBOL' and self.tokenizer.symbol() in ['(', '-', '~']:
-            self.write_token()  # '(' or unaryOp
+        elif self.tokenizer.token_type() == 'SYMBOL' and self.tokenizer.symbol() == '(':
+            self.write_token()  # '('
+            self.compile_expression()
+            self.write_token()  # ')'
+        elif self.tokenizer.token_type() == 'SYMBOL' and self.tokenizer.symbol() in ['-', '~']:
+            self.write_token()  # unaryOp
             self.compile_term()
 
         self.indentation -= 1
